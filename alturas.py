@@ -42,32 +42,33 @@ while input_set_index < n_inputs:
     equipes = [list(map(int, input().split())) for _ in range(2)]
     resultados = []
 
-    for equipe in equipes:
+    equipe_vencedora, melhor_resultado = 1, 0
+
+    for e, equipe in enumerate(equipes):
         lista_possibilidades = []
         for a, altura in enumerate(equipe):
             mudanca = False
             if a > 0:
-                nova_possibilidade = []
                 for p in range(len(lista_possibilidades)):
                     if lista_possibilidades[p][-1] <= altura:
                         lista_possibilidades.append(
                             copy.deepcopy(lista_possibilidades[p])
                         )
                         lista_possibilidades[p].append(altura)
+                        lista_possibilidades.sort(key=len, reverse=True)
                         mudanca = True
+                        break
             if not mudanca or a == 0:
                 lista_possibilidades.append([altura])
-        lista_len_possibilidades = [
-            len(possibilidade) for possibilidade in lista_possibilidades
-        ]
-        resultados.append(max(lista_len_possibilidades))
+        if e == 0:
+            melhor_resultado = len(lista_possibilidades[0])
+        elif len(lista_possibilidades[0]) == melhor_resultado:
+            equipe_vencedora = "EMPATE"
+        elif len(lista_possibilidades[0]) > melhor_resultado:
+            equipe_vencedora = 2
+            melhor_resultado = len(lista_possibilidades[0])
 
-    if resultados[0] == resultados[1]:
-        print(f"EMPATE {resultados[0]}")
-    else:
-        resultado_melhor = max(resultados)
-        equipe_vencedora = resultados.index(resultado_melhor) + 1
-        print(f"{equipe_vencedora} {resultado_melhor}")
+    print(f"{equipe_vencedora} {melhor_resultado}")
 
     # Fim do código principal
 
